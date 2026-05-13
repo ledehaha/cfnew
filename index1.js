@@ -2666,11 +2666,11 @@ if (!user) user = at;
     `;
        
     const pageHtml = `<!DOCTYPE html>
-    <html lang="${langAttr}" dir="${isFarsi ? 'rtl' : 'ltr'}">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${t.title}</title>
+<html lang="${langAttr}" dir="${isFarsi ? 'rtl' : 'ltr'}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订阅中心</title>
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body {
@@ -2872,6 +2872,7 @@ if (!user) user = at;
         </style>
     </head>
     <body>
+	     <!-- 完整的页面表单结构 -->
         <div class="matrix-bg"></div>
         <div class="matrix-rain"></div>
         <div class="matrix-code-rain" id="matrixCodeRain"></div>
@@ -3248,6 +3249,14 @@ if (!user) user = at;
                 </div>
             </div>
         </div>
+		<!-- ==================== 多选 wk 区域 ==================== -->
+    <div class="form-group">
+        <label>指定地区 (wk):</label>
+        <select id="wkRegion" multiple size="10" style="width:100%; min-height:260px; background:rgba(0,20,0,0.95); color:#00ff00; border:2px solid #00aa00; padding:8px; font-family:monospace;">
+            ${regionOptions}
+        </select>
+        <small style="color:#00cc00;">💡 按住 Ctrl（Win）或 Command（Mac）可多选，顺序即优先级</small>
+    </div>
         <script>
 		     // ==================== 多选加载与保存逻辑 ====================
         async function loadCurrentConfig() {
