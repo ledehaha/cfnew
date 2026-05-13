@@ -2881,22 +2881,36 @@
                 <div id="configContent" style="display: none;">
                     <form id="regionForm" style="margin-bottom: 20px;">
                         <div style="margin-bottom: 15px;">
-                                <label style="display: block; margin-bottom: 8px; color: #00ff00; font-weight: bold; text-shadow: 0 0 3px #00ff00;">${t.specifyRegion}</label>
-                            <select id="wkRegion" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); border: 2px solid #00ff00; color: #00ff00; font-family: 'Courier New', monospace; font-size: 14px;">
-                                    <option value="">${t.autoDetect}</option>
-                                    <option value="HK">${t.regionNames.HK}</option>
-                                    <option value="US">${t.regionNames.US}</option>
-                                    <option value="SG">${t.regionNames.SG}</option>
-                                    <option value="JP">${t.regionNames.JP}</option>
-                                    <option value="KR">${t.regionNames.KR}</option>
-                                    <option value="DE">${t.regionNames.DE}</option>
-                                    <option value="SE">${t.regionNames.SE}</option>
-                                    <option value="NL">${t.regionNames.NL}</option>
-                                    <option value="FI">${t.regionNames.FI}</option>
-                                    <option value="GB">${t.regionNames.GB}</option>
-                            </select>
-                                <small id="wkRegionHint" style="color: #00aa00; font-size: 0.85rem; display: none;">⚠️ ${t.customIPDisabledHint}</small>
-                        </div>
+    <label style="display: block; margin-bottom: 8px; color: #00ff00; font-weight: bold; text-shadow: 0 0 3px #00ff00;">
+        ${t.specifyRegion}
+    </label>
+    <select id="wkRegion" multiple size="8" 
+            style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.8); 
+                   border: 2px solid #00ff00; color: #00ff00; font-family: 'Courier New', monospace; 
+                   font-size: 14px; min-height: 180px;">
+        <option value="">${t.autoDetect} (自动检测)</option>
+        <option value="SG">🇸🇬 新加坡 (SG)</option>
+        <option value="JP">🇯🇵 日本 (JP)</option>
+        <option value="US">🇺🇸 美国 (US)</option>
+        <option value="KR">🇰🇷 韩国 (KR)</option>
+        <option value="HK">🇭🇰 香港 (HK)</option>
+        <option value="DE">🇩🇪 德国 (DE)</option>
+        <option value="GB">🇬🇧 英国 (GB)</option>
+        <option value="NL">🇳🇱 荷兰 (NL)</option>
+        <option value="SE">🇸🇪 瑞典 (SE)</option>
+        <option value="FI">🇫🇮 芬兰 (FI)</option>
+        <option value="Oracle">甲骨文 (Oracle)</option>
+        <option value="DigitalOcean">数码海 (DigitalOcean)</option>
+        <option value="Vultr">Vultr</option>
+        <option value="Multacom">Multacom</option>
+    </select>
+    <small id="wkRegionHint" style="color: #00aa00; font-size: 0.85rem; display: none;">
+        ⚠️ 自定义ProxyIP模式下地区选择已禁用
+    </small>
+    <small style="color: #00aa00; display: block; margin-top: 5px;">
+        💡 可多选（按 Ctrl / Command 键），优先级从上到下
+    </small>
+</div>
                             <button type="submit" style="background: rgba(0, 255, 0, 0.15); border: 2px solid #00ff00; padding: 12px 24px; color: #00ff00; font-family: 'Courier New', monospace; font-weight: bold; cursor: pointer; margin-right: 10px; text-shadow: 0 0 8px #00ff00; transition: all 0.4s ease;">${t.saveRegion}</button>
                     </form>
                     <form id="otherConfigForm" style="margin-bottom: 20px;">
