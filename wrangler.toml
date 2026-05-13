@@ -1,3 +1,3 @@
-name = "cfnew"
+name = "cfsnowflake"
 main = "index.js"
 compatibility_date = "2026-01-20"
