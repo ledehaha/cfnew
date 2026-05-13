@@ -360,16 +360,25 @@
                 const ci = getConfigValue('p', env.p || env.P);
                 let useCustomIP = false;
 
-                const manualRegion = getConfigValue('wk', env.wk || env.WK);
-                if (manualRegion && manualRegion.trim()) {
-                    manualWorkerRegion = manualRegion.trim().toUpperCase();
-                    currentWorkerRegion = manualWorkerRegion;
-            } else if (ci && ci.trim()) {
-                    useCustomIP = true;
-                    currentWorkerRegion = 'CUSTOM';
-                } else {
-                    currentWorkerRegion = await detectWorkerRegion(request);
-                }
+                // 【已支持多选】wk 多地区处理
+const manualRegionStr = getConfigValue('wk', env.wk || env.WK || '');
+let manualRegionsList = [];
+
+if (manualRegionStr && manualRegionStr.trim()) {
+    manualRegionsList = manualRegionStr.split(',')
+        .map(r => r.trim().toUpperCase())
+        .filter(r => r.length > 0);
+
+    if (manualRegionsList.length > 0) {
+        manualWorkerRegion = manualRegionsList[0];           // 第一个作为主优先级
+        currentWorkerRegion = manualRegionsList.join(',');   // 保存完整列表
+    }
+} else if (ci && ci.trim()) {
+    useCustomIP = true;
+    currentWorkerRegion = 'CUSTOM';
+} else {
+    currentWorkerRegion = await detectWorkerRegion(request);
+}
 
                 const regionMatchingControl = env.rm || env.RM;
                 if (regionMatchingControl && regionMatchingControl.toLowerCase() === 'no') {
@@ -6106,18 +6115,24 @@
     }
 
     function updateConfigVariables() {
-        const manualRegion = getConfigValue('wk', '');
-        if (manualRegion && manualRegion.trim()) {
-            manualWorkerRegion = manualRegion.trim().toUpperCase();
-            currentWorkerRegion = manualWorkerRegion;
-        } else {
-            const ci = getConfigValue('p', '');
-            if (ci && ci.trim()) {
-                currentWorkerRegion = 'CUSTOM';
-            } else {
-                manualWorkerRegion = '';
-            }
+             const manualRegionStr = getConfigValue('wk', '');
+    if (manualRegionStr && manualRegionStr.trim()) {
+        const regions = manualRegionStr.split(',')
+            .map(r => r.trim().toUpperCase())
+            .filter(Boolean);
+        
+        if (regions.length > 0) {
+            manualWorkerRegion = regions[0];
+            currentWorkerRegion = regions.join(',');
         }
+    } else {
+        const ci = getConfigValue('p', '');
+        if (ci && ci.trim()) {
+            currentWorkerRegion = 'CUSTOM';
+        } else {
+            manualWorkerRegion = '';
+        }
+    }
 
         const regionMatchingControl = getConfigValue('rm', '');
         if (regionMatchingControl && regionMatchingControl.toLowerCase() === 'no') {
