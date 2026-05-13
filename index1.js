@@ -6115,7 +6115,8 @@ if (manualRegionStr && manualRegionStr.trim()) {
     }
 
     function updateConfigVariables() {
-             const manualRegionStr = getConfigValue('wk', '');
+    // 【多选支持】wk 处理
+    const manualRegionStr = getConfigValue('wk', '');
     if (manualRegionStr && manualRegionStr.trim()) {
         const regions = manualRegionStr.split(',')
             .map(r => r.trim().toUpperCase())
