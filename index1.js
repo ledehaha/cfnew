@@ -2315,36 +2315,50 @@ if (manualRegionStr && manualRegionStr.trim()) {
     }
 
     async function handleSubscriptionPage(request, user = null) {
-        if (!user) user = at;
+if (!user) user = at;
 
-        const url = new URL(request.url);
-        // 优先检查Cookie中的语言设置
-        const cookieHeader = request.headers.get('Cookie') || '';
-        let langFromCookie = null;
-        if (cookieHeader) {
-            const cookies = cookieHeader.split(';').map(c => c.trim());
-            for (const cookie of cookies) {
-                if (cookie.startsWith('preferredLanguage=')) {
-                    langFromCookie = cookie.split('=')[1];
-                    break;
-                }
+    const url = new URL(request.url);
+    // 语言检测逻辑（保持不变）
+    const cookieHeader = request.headers.get('Cookie') || '';
+    let langFromCookie = null;
+    if (cookieHeader) {
+        const cookies = cookieHeader.split(';').map(c => c.trim());
+        for (const cookie of cookies) {
+            if (cookie.startsWith('preferredLanguage=')) {
+                langFromCookie = cookie.split('=')[1];
+                break;
             }
         }
+    }
 
-        let isFarsi = false;
+    let isFarsi = langFromCookie === 'fa' || langFromCookie === 'fa-IR';
+    if (!langFromCookie) {
+        const acceptLanguage = request.headers.get('Accept-Language') || '';
+        const browserLang = acceptLanguage.split(',')[0].split('-')[0].toLowerCase();
+        isFarsi = browserLang === 'fa' || acceptLanguage.includes('fa');
+    }
 
-        if (langFromCookie === 'fa' || langFromCookie === 'fa-IR') {
-            isFarsi = true;
-        } else if (langFromCookie === 'zh' || langFromCookie === 'zh-CN') {
-            isFarsi = false;
-        } else {
-            // 如果没有Cookie，使用浏览器语言检测
-            const acceptLanguage = request.headers.get('Accept-Language') || '';
-            const browserLang = acceptLanguage.split(',')[0].split('-')[0].toLowerCase();
-            isFarsi = browserLang === 'fa' || acceptLanguage.includes('fa-IR') || acceptLanguage.includes('fa');
-        }
+    const langAttr = isFarsi ? 'fa-IR' : 'zh-CN';
+    const t = isFarsi ? translations.fa : translations.zh;  // 假设你有 translations 对象
 
-        const langAttr = isFarsi ? 'fa-IR' : 'zh-CN';
+    // ====================== 多选地区下拉框 HTML ======================
+    const regionOptions = `
+        <option value="">自动检测（推荐）</option>
+        <option value="SG">🇸🇬 新加坡</option>
+        <option value="JP">🇯🇵 日本</option>
+        <option value="US">🇺🇸 美国</option>
+        <option value="KR">🇰🇷 韩国</option>
+        <option value="HK">🇭🇰 香港</option>
+        <option value="DE">🇩🇪 德国</option>
+        <option value="GB">🇬🇧 英国</option>
+        <option value="NL">🇳🇱 荷兰</option>
+        <option value="SE">🇸🇪 瑞典</option>
+        <option value="FI">🇫🇮 芬兰</option>
+        <option value="Oracle">甲骨文 Oracle</option>
+        <option value="DigitalOcean">数码海 DigitalOcean</option>
+        <option value="Vultr">Vultr</option>
+        <option value="Multacom">Multacom</option>
+    `;
             
         const translations = {
             zh: {
