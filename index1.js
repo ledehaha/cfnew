@@ -2318,7 +2318,8 @@ if (manualRegionStr && manualRegionStr.trim()) {
 if (!user) user = at;
 
     const url = new URL(request.url);
-    // 语言检测逻辑（保持不变）
+
+    // ==================== 语言检测 ====================
     const cookieHeader = request.headers.get('Cookie') || '';
     let langFromCookie = null;
     if (cookieHeader) {
