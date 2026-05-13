@@ -2318,7 +2318,8 @@ if (manualRegionStr && manualRegionStr.trim()) {
 if (!user) user = at;
 
     const url = new URL(request.url);
-    // 语言检测逻辑（保持不变）
+
+    // ==================== 语言检测 ====================
     const cookieHeader = request.headers.get('Cookie') || '';
     let langFromCookie = null;
     if (cookieHeader) {
@@ -2645,6 +2646,26 @@ if (!user) user = at;
 
         const t = translations[isFarsi ? 'fa' : 'zh'];
 
+		// ==================== 多选地区选项 ====================
+    const regionOptions = `
+        <option value="">自动检测（推荐）</option>
+        <option value="SG">🇸🇬 新加坡</option>
+        <option value="JP">🇯🇵 日本</option>
+        <option value="US">🇺🇸 美国</option>
+        <option value="KR">🇰🇷 韩国</option>
+        <option value="HK">🇭🇰 香港</option>
+        <option value="DE">🇩🇪 德国</option>
+        <option value="GB">🇬🇧 英国</option>
+        <option value="NL">🇳🇱 荷兰</option>
+        <option value="SE">🇸🇪 瑞典</option>
+        <option value="FI">🇫🇮 芬兰</option>
+        <option value="Oracle">甲骨文 Oracle</option>
+        <option value="DigitalOcean">数码海 DigitalOcean</option>
+        <option value="Vultr">Vultr</option>
+        <option value="Multacom">Multacom</option>
+    `;
+
+		// ==================== 主页面 HTML（保留你原有绝大部分结构） ====================
     const pageHtml = `<!DOCTYPE html>
     <html lang="${langAttr}" dir="${isFarsi ? 'rtl' : 'ltr'}">
     <head>
