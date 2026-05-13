@@ -2644,8 +2644,27 @@ if (!user) user = at;
             }
         };
 
-        const t = translations[isFarsi ? 'fa' : 'zh'];
+       const t = isFarsi ? translations.fa : translations.zh;
 
+    // ==================== 多选地区 HTML ====================
+    const regionOptions = `
+        <option value="">自动检测（推荐）</option>
+        <option value="SG">🇸🇬 新加坡</option>
+        <option value="JP">🇯🇵 日本</option>
+        <option value="US">🇺🇸 美国</option>
+        <option value="KR">🇰🇷 韩国</option>
+        <option value="HK">🇭🇰 香港</option>
+        <option value="DE">🇩🇪 德国</option>
+        <option value="GB">🇬🇧 英国</option>
+        <option value="NL">🇳🇱 荷兰</option>
+        <option value="SE">🇸🇪 瑞典</option>
+        <option value="FI">🇫🇮 芬兰</option>
+        <option value="Oracle">甲骨文 Oracle</option>
+        <option value="DigitalOcean">数码海 DigitalOcean</option>
+        <option value="Vultr">Vultr</option>
+        <option value="Multacom">Multacom</option>
+    `;
+       
     const pageHtml = `<!DOCTYPE html>
     <html lang="${langAttr}" dir="${isFarsi ? 'rtl' : 'ltr'}">
     <head>
@@ -3230,6 +3249,58 @@ if (!user) user = at;
             </div>
         </div>
         <script>
+		     // ==================== 多选加载与保存逻辑 ====================
+        async function loadCurrentConfig() {
+            // ... 你原来的加载代码 ...
+
+            const wkSelect = document.getElementById('wkRegion');
+            if (wkSelect) {
+                const currentWk = getConfigValue('wk', '');
+                const selected = currentWk ? currentWk.split(',').map(r => r.trim().toUpperCase()) : [];
+                Array.from(wkSelect.options).forEach(opt => {
+                    opt.selected = selected.includes(opt.value);
+                });
+            }
+            updateWkRegionState();
+        }
+
+        // 保存地区（多选）
+        const regionForm = document.getElementById('regionForm');
+        if (regionForm) {
+            regionForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const wkSelect = document.getElementById('wkRegion');
+                const selectedValues = Array.from(wkSelect.selectedOptions)
+                    .map(option => option.value)
+                    .filter(v => v !== '')
+                    .join(',');
+                await saveConfig({ wk: selectedValues });
+            });
+        }
+
+        function updateWkRegionState() {
+            const customIPInput = document.getElementById('customIP');
+            const wkRegion = document.getElementById('wkRegion');
+            if (customIPInput && wkRegion) {
+                const hasCustomIP = customIPInput.value.trim() !== '';
+                wkRegion.disabled = hasCustomIP;
+                wkRegion.style.opacity = hasCustomIP ? '0.5' : '1';
+            }
+        }
+
+        // DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            createMatrixRain();
+            checkSystemStatus();
+            checkKVStatus();
+            checkECHStatus();
+            loadCurrentConfig();
+
+            const customIPInput = document.getElementById('customIP');
+            if (customIPInput) customIPInput.addEventListener('input', updateWkRegionState);
+
+            // ... 你原来的其他按钮事件绑定代码保持不变 ...
+        });
             // 订阅转换地址（从服务器配置注入）
             var SUB_CONVERTER_URL = "${ scu }";
             // 远程配置URL（硬编码）
